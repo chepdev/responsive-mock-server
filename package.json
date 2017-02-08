@@ -1,6 +1,6 @@
 {
   "name": "responsive-mock-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A configurable ExpressJS server that will allow you to easily mock out API calls using plain old Javascript functions.",
   "main": "./src/index.js",
   "scripts": {
