@@ -1,21 +1,26 @@
 # Responsive Mock Server
 A configurable ExpressJS server that will allow you to easily mock out API calls using plain old Javascript functions.
 
+There are a bunch of really great mock servers out there with loads of bells and whistles. This mock server prides itself on being simple and allowing you to have fully dynamic responses. Because the responses are just normal JS functions and you have access to the ExpressJS `request` object, you can return any response based on the given call. This allows you to, for instance, return a user object with the given user's ID injected, making your mocks seem a lot more personal.
+
+Check out the `test` directory if you want to see a working sample server with calls and responses.
+
+
 ## Installation
-NPM install
+NPM install (install as devDependency if you want)
 ```bash
-npm i -S responsive-mock-server
+npm i -D responsive-mock-server
 ```
 
 or if you 😍 `yarn`
 
 ```bash
-yarn add responsive-mock-server
+yarn add --dev responsive-mock-server
 ```
 
 ## Usage
 
-First create your server file with all your API calls.
+1. First create your server file with all your API calls.
 
 ```
 // Import the package
@@ -48,7 +53,7 @@ const server = mockServer({
     'get|/api/users': 'get-all-users|200|1000',
     'put|/api/users/:userId/settings': 'update-users-settings|204'
   },
-  // Absolute path to where your response files are stored
+  // Absolute path to where your response/fixture files are stored
   responseDirectory: path.resolve(__dirname, 'your-responses-directory'),
   // Optional port, defaults to 3001
   port: 3001
@@ -58,7 +63,7 @@ const server = mockServer({
 server.start();
 ```
 
-Now, make sure you create the response files for each of your calls.
+2. Now, make sure you create the response files for each of your calls.
 It is important that the name you specify as the `fixture` in the calls object matches the file names exactly.
 
 Based on the example above you will have 4 fixture files in the `./your-responses-directory`, namely:
@@ -67,7 +72,7 @@ Based on the example above you will have 4 fixture files in the `./your-response
 * get-all-users.js
 * update-users-settings.js
 
-Each of these files should export a function that will receive a normal ExpressJS `request` and `response` object.
+Each of the response/fixture files should export a function that will receive a normal ExpressJS `request` and `response` object.
 You will at most only need the `request` object if you want to make your mock responses dynamic based on given
 URL or query parameters. The mock server will automatically parse the responses for you and make these available on the
 `request` object.
@@ -82,5 +87,3 @@ module.exports = function(req, res) {
   };
 };
 ```
-
-Check out the `test` directory if you want to see a working sample server with calls and responses.
