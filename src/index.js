@@ -22,7 +22,7 @@ mockServer.use(cookieParser());
 function processCall({ method, responseStatus, endpoint, fileData, timeout }) {
   mockServer.use(endpoint, (req, res, next) => {
     console.log(`${chalk.blue('METHOD:')} ${chalk.green(method.toUpperCase())} ${chalk.blue('CALL:')} ${chalk.green(endpoint)}`);
-    
+
     if ((req.method).toLowerCase() === method.toLowerCase()) {
       const response = isFunction(fileData) ? fileData(req, res) : fileData;
       if (response) {
@@ -36,7 +36,7 @@ function processCall({ method, responseStatus, endpoint, fileData, timeout }) {
   });
 }
 
-module.exports = function({ calls = {}, responseDirectory, port = 3001 }) {
+module.exports = function({ calls = {}, responseDirectory, port = 3001, staticFileDirectory = false, staticFileMountPath = false }) {
   // Using lodash's forEach because we're iterating over a POJO
   forEach(calls, (value, key) => {
     const parts = value.split('|');
@@ -49,24 +49,26 @@ module.exports = function({ calls = {}, responseDirectory, port = 3001 }) {
     const fileData = require(resolve(responseDirectory, responseFilename));
     processCall({ method, responseStatus, endpoint, fileData, timeout });
   });
-  
+
   mockServer.start = () => {
-    ////////////////////////////////////
-    // Error handling
-    ////////////////////////////////////
-  
+    // Do we need to handle static files?
+    if (staticFileDirectory) {
+      const staticArgs = staticFileMountPath ? [ staticFileMountPath, express.static(staticFileDirectory) ] : [ express.static(staticFileDirectory) ];
+      mockServer.use(...staticArgs);
+    }
+
     // Handle 404
     mockServer.use((req, res) => {
       console.error(chalk.red(`‼️ MISSING: 404: ${req.method} ${req.url}`));
       res.status(404).json({ error: 'Endpoint doesn\'t exist' });
     });
-  
+
     // Handle 500
     mockServer.use((error, req, res) => {
       console.error(chalk.red(`⚙️ SERVER ERROR: 500: ${req.method} ${req.url}`));
       res.status(500).json({ error: 'Internal Server Error' });
     });
-  
+
     ////////////////////////////////////
     // Ready? Let's go!
     ////////////////////////////////////
@@ -74,11 +76,11 @@ module.exports = function({ calls = {}, responseDirectory, port = 3001 }) {
       if (err) {
         return logger.error(err);
       }
-      
+
       return logger.appStarted(port, 'MOCK');
     });
   };
-  
+
   return mockServer;
 };
 
