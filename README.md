@@ -56,9 +56,9 @@ const server = mockServer({
   // Absolute path to where your response/fixture files are stored
   responseDirectory: path.resolve(__dirname, 'your-responses-directory'),
   // Optional absolute path to where your static files are stored (ignore this if you don't serve up static files)
-  fileStaticDirectory: path.resolve(__dirname, 'your-static-files-directory'),
-  // Optional mount path if you want to create a virtual prefix from which static files should be served (only takes affect if `fileStaticDirectory` is set)
-  fileStaticMountPath: '/public',
+  staticFileDirectory: path.resolve(__dirname, 'your-static-files-directory'),
+  // Optional mount path if you want to create a virtual prefix from which static files should be served (only takes affect if `staticFileDirectory` is set)
+  staticFileMountPath: '/public',
   // Optional port, defaults to 3001
   port: 3001
 });
