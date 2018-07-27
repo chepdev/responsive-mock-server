@@ -73,7 +73,7 @@ module.exports = function({
     }
 
     if (proxyStaticAssets.path && proxyStaticAssets.hostTarget) {
-      app.use(proxyStaticAssets.path, (req, res) => {
+      mockServer.use(proxyStaticAssets.path, (req, res) => {
         request(proxyStaticAssets.hostTarget).pipe(res);
       });
     }
