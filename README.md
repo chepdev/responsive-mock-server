@@ -1,13 +1,15 @@
 # Responsive Mock Server
+
 A configurable ExpressJS server that will allow you to easily mock out API calls using plain old Javascript functions.
 
 There are a bunch of really great mock servers out there with loads of bells and whistles. This mock server prides itself on being simple and allowing you to have fully dynamic responses. Because the responses are just normal JS functions and you have access to the ExpressJS `request` object, you can return any response based on the given call. This allows you to, for instance, return a user object with the given user's ID injected, making your mocks seem a lot more personal.
 
 Check out the `test` directory if you want to see a working sample server with calls and responses.
 
-
 ## Installation
+
 NPM install (install as devDependency if you want)
+
 ```bash
 npm i -D responsive-mock-server
 ```
@@ -20,7 +22,7 @@ yarn add --dev responsive-mock-server
 
 ## Usage
 
-1. First create your server file with all your API calls.
+1.  First create your server file with all your API calls.
 
 ```
 // Import the package
@@ -61,20 +63,26 @@ const server = mockServer({
   staticFileMountPath: '/public',
   // Optional port, defaults to 3001
   port: 3001
+  // proxy static asset requests to target host
+  proxyStaticAssets: {
+    path: "/storage",
+    hostTarget: "https://google.com/storage"
+  }
 });
 
 // Finally, start this sucker up! 🚀
 server.start();
 ```
 
-2. Now, make sure you create the response files for each of your calls.
-It is important that the name you specify as the `fixture` in the calls object matches the file names exactly.
+2.  Now, make sure you create the response files for each of your calls.
+    It is important that the name you specify as the `fixture` in the calls object matches the file names exactly.
 
 Based on the example above you will have 4 fixture files in the `./your-responses-directory`, namely:
-* get-users-photo.js
-* create-new-user-photo.js
-* get-all-users.js
-* update-users-settings.js
+
+- get-users-photo.js
+- create-new-user-photo.js
+- get-all-users.js
+- update-users-settings.js
 
 Each of the response/fixture files should export a function that will receive a normal ExpressJS `request` and `response` object.
 You will at most only need the `request` object if you want to make your mock responses dynamic based on given

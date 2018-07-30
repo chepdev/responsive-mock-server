@@ -72,6 +72,7 @@ module.exports = function({
       mockServer.use(...staticArgs);
     }
 
+    // proxy static assets request to your preffered host?
     if (proxyStaticAssets.path && proxyStaticAssets.hostTarget) {
       mockServer.use(proxyStaticAssets.path, (req, res) => {
         request(proxyStaticAssets.hostTarget + req.url).pipe(res);

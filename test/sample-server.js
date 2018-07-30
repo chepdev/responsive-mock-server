@@ -9,8 +9,8 @@ const server = mockServer({
   staticFileMountPath: "/public",
   port: 3001,
   proxyStaticAssets: {
-    path: "/storage/assets/*",
-    hostTarget: "https://google.com/"
+    path: "/storage/",
+    hostTarget: "https://google.com/storage"
   }
 });
 
